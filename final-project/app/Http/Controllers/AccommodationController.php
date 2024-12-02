@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class AccommodationController extends Controller
 {
-    public function index()
-    {
-        return view('welcome');
-    }
-
     public function display()
     {
         $accommodations = Accommodation::all();

@@ -2,8 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\LoginController;
 
-Route::get('/', [AccommodationController::class, "index"]);
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 Route::get('/accommodation', [AccommodationController::class, "display"]);
 Route::get('/accommodation/create', [AccommodationController::class, 'create']);
 Route::post('/accommodation', [AccommodationController::class, 'store']);

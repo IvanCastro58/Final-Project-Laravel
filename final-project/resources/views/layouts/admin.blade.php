@@ -12,7 +12,7 @@
 </head>
 <body class="bg-body-secondary">
     <div class="d-flex">
-        <div class="header bg-white text-dark d-flex align-items-center justify-content-between px-3 py-2">
+        <div class="header bg-primary text-white d-flex align-items-center justify-content-between px-3 py-2">
             <button class="btn btn-white toggle-btn" id="toggleSidebar">
                 <i class="bi bi-list"></i>
             </button>
@@ -27,12 +27,6 @@
                     <div class="text-secondary title">
                         NAV TITLE
                     </div>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
-                            <i class="bi bi-grid-1x2"></i>
-                            <span class="nav-text">Dashboard</span>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ request()->is('reservation') ? 'active' : '' }}">
                             <i class="bi bi-calendar2-minus"></i>
@@ -55,6 +49,12 @@
                         <a href="#" class="nav-link {{ request()->is('packages') ? 'active' : '' }}">
                             <i class="bi bi-box-seam"></i>
                             <span class="nav-text">Packages</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link {{ request()->is('employee') ? 'active' : '' }}">
+                            <i class="bi bi-people"></i>
+                            <span class="nav-text">Employee</span>
                         </a>
                     </li>
                     <li class="nav-item">
