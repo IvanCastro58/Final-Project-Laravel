@@ -4,7 +4,7 @@
 <div class="container-fluid mt-5 flex-grow-1 p-5 content">
     <h2 class="fw-bold">Add New Accommodation</h2>
     <p class="text-secondary fw-semibold mb-4">Please fill out the form below to add a new accommodation to the system.</p>
-    <form method="POST" action="/accommodation">
+    <form method="POST" action="/accommodation" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="accommodation_name" class="form-label">Accommodation Name</label>
@@ -29,6 +29,11 @@
                 <option value="0">Not Available</option>
             </select>
         </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Add Image</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+        </div>
+
         <button type="submit" class="btn btn-primary">Add Accommodation</button>
     </form>
 </div>

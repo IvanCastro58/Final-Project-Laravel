@@ -106,15 +106,6 @@
     transition: margin-left 0.3s ease;
 }
 
-th{
-    font-size: 14px;
-    text-transform: uppercase;
-}
-
-td{
-    font-size: 12px;
-}
-
 .wrapper-table{
     border-radius: 20px;
 }

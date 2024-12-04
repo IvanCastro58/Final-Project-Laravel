@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid mt-5 flex-grow-1 p-5 content">
-        <h2 class="fw-bold">Manage Accommodation</h2>
+        <h2 class="fw-bold">Manage Employee</h2>
         <p class="text-secondary fw-semibold">Here’s where you manage the content for accommodations.</p>
         <div class="d-flex justify-content-between align-items-center my-3">
             <a href="/accommodation/create" class="btn btn-info text-white fw-semibold rounded-pill"><i class="bi bi-plus-circle me-2"></i>Add New Accommodation</a>

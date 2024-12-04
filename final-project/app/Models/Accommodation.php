@@ -17,6 +17,7 @@ class Accommodation extends Model
         "capacity",
         "price_per_night",
         "availability_status",
+        "image",
     ];
 }
 

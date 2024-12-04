@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     */
+     */ 
     public function up()
     {
         Schema::create('accommodations', function (Blueprint $table) {
@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('capacity');
             $table->decimal('price_per_night', 8, 2);
             $table->boolean('availability_status')->default(true);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
