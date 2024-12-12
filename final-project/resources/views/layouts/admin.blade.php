@@ -26,7 +26,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <a class="dropdown-item" href="#">
-                                <span>{{ session('employee')->name }}</span>
+                                <span class="fw-semibold">{{ session('employee')->name }}</span>
                                 <br>
                                 <span class="text-secondary" style="font-size: smaller;">{{ session('employee')->email }}</span>
                             </a>
@@ -81,13 +81,13 @@
                     </li>
                     @if(session('employee') && session('employee')->role === 'admin')
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('employee') ? 'active' : '' }}">
+                            <a href="/employee" class="nav-link {{ request()->is('employee') ? 'active' : '' }}">
                                 <i class="bi bi-people"></i>
                                 <span class="nav-text">Employee</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('audit-logs') ? 'active' : '' }}">
+                            <a href="/audit-logs" class="nav-link {{ request()->is('audit-logs') ? 'active' : '' }}">
                                 <i class="bi bi-file-earmark-text"></i>
                                 <span class="nav-text">Audit Logs</span>
                             </a>
