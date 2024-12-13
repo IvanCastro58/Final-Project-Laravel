@@ -19,6 +19,7 @@ class AccommodationTableSeeder extends Seeder
             'capacity' => 6,
             'price_per_night' => 8000.00,
             'availability_status' => true,
+            'image' => 'accommodations/3pRhAvdyw4dKv2Oeqd5UOeTnn6Mt9WSPENhS63Oc.jpg',
         ]);
 
         Accommodation::create([
@@ -27,6 +28,7 @@ class AccommodationTableSeeder extends Seeder
             'capacity' => 4,
             'price_per_night' => 5000.00,
             'availability_status' => true,
+            'image' => 'accommodations/LnYibxHq41DlmPx2SKAyLi1cZSUACRBtfNrz5umt.jpg',
         ]);
 
         Accommodation::create([
@@ -35,22 +37,7 @@ class AccommodationTableSeeder extends Seeder
             'capacity' => 2,
             'price_per_night' => 4000.00,
             'availability_status' => false,
-        ]);
-
-        Accommodation::create([
-            'accommodation_name' => 'Palawan Private Villa',
-            'description' => 'A private villa with breathtaking ocean views in El Nido, Palawan. Perfect for families and groups.',
-            'capacity' => 8,
-            'price_per_night' => 12000.00,
-            'availability_status' => false,
-        ]);
-
-        Accommodation::create([
-            'accommodation_name' => 'Vigan Heritage Home',
-            'description' => 'A charming heritage home in the historic city of Vigan, capturing old-world Filipino architecture.',
-            'capacity' => 5,
-            'price_per_night' => 4500.00,
-            'availability_status' => true,
+            'image' => 'accommodations/whKA0sJyzf8NQjfXB9QfAaNaMVPXzhEBqjn5PhCZ.jpg',
         ]);
     }
 }

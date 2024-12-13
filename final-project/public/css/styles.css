@@ -68,7 +68,7 @@
 }
 
 .sidebar .nav-link i{
-    font-size: 16px
+    font-size: 16px;
 }
 
 .sidebar .nav-link .nav-text {
@@ -118,4 +118,14 @@
 
 .sidebar.collapsed .title{
     display: none;
+}
+
+.alert-custom {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 3px 10px;
+    display: inline-block;
+    text-align: center;
 }

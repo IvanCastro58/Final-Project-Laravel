@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accommodation;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
 class AccommodationController extends Controller
@@ -51,11 +52,18 @@ class AccommodationController extends Controller
             $data['image'] = $imagePath;
         }
 
-        Accommodation::create($data);
+        $accommodation = Accommodation::create($data);
+
+        $employeeId = session('employee')['id'];
+
+        AuditLog::create([
+            'action' => 'Create',
+            'description' => "Accommodation with ID {$accommodation->id} added successfully.",
+            'performed_by' => $employeeId,
+        ]);
 
         return redirect('/accommodation')->with('success', 'Accommodation added successfully.');
     }
-
 
     public function edit($id)
     {
@@ -79,14 +87,32 @@ class AccommodationController extends Controller
 
         $accommodation = Accommodation::findOrFail($id);
         $accommodation->update($request->all());
+
+        $employeeId = session('employee')['id'];
+
+        AuditLog::create([
+            'action' => 'Update',
+            'description' => "Accommodation with ID {$accommodation->id} updated successfully.",
+            'performed_by' => $employeeId,
+        ]);
+
         return redirect('/accommodation')->with('success', 'Accommodation updated successfully.');
     }
 
     public function destroy($id)
     {
         $accommodation = Accommodation::findOrFail($id);
+        $accommodationId = $accommodation->id;
         $accommodation->delete();
+
+        $employeeId = session('employee')['id'];
+
+        AuditLog::create([
+            'action' => 'Delete',
+            'description' => "Accommodation with ID {$accommodationId} deleted successfully.",
+            'performed_by' => $employeeId,
+        ]);
+
         return redirect('/accommodation')->with('success', 'Accommodation deleted successfully.');
     }
 }
-
