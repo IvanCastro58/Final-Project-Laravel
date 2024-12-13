@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
 
     <title>Resort Reservation - Accomodation</title>
 </head>
+
 <body class="bg-body-secondary">
     <div class="d-flex">
         <div class="header bg-primary text-white d-flex align-items-center justify-content-between px-3 py-2">
@@ -19,33 +21,35 @@
             <h5 class="mb-0">RESORT RESERVATION SYSTEM</h5>
             <div class="dropdown">
                 @if(session('employee'))
-                    <button class="btn btn-primary d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span>{{ ucfirst(session('employee')->role) }}</span>
-                        <i class="bi bi-chevron-down ms-2"></i> 
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <span>{{ session('employee')->name }}</span>
-                                <br>
-                                <span class="text-secondary" style="font-size: smaller;">{{ session('employee')->email }}</span>
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bi bi-person me-2"></i> View Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                <button class="btn btn-primary d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span>{{ ucfirst(session('employee')->role) }}</span>
+                    <i class="bi bi-chevron-down ms-2"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <span>{{ session('employee')->name }}</span>
+                            <br>
+                            <span class="text-secondary" style="font-size: smaller;">{{ session('employee')->email }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="bi bi-person me-2"></i> View Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
                 @endif
             </div>
         </div>
@@ -68,7 +72,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->is('amenities') ? 'active' : '' }}">
+                        <a href="/amenities/index" class="nav-link {{ request()->is('amenities/index') ? 'active' : '' }}">
                             <i class="bi bi-gear"></i>
                             <span class="nav-text">Amenities</span>
                         </a>
@@ -80,18 +84,18 @@
                         </a>
                     </li>
                     @if(session('employee') && session('employee')->role === 'admin')
-                        <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('employee') ? 'active' : '' }}">
-                                <i class="bi bi-people"></i>
-                                <span class="nav-text">Employee</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->is('audit-logs') ? 'active' : '' }}">
-                                <i class="bi bi-file-earmark-text"></i>
-                                <span class="nav-text">Audit Logs</span>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link {{ request()->is('employee') ? 'active' : '' }}">
+                            <i class="bi bi-people"></i>
+                            <span class="nav-text">Employee</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link {{ request()->is('audit-logs') ? 'active' : '' }}">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span class="nav-text">Audit Logs</span>
+                        </a>
+                    </li>
                     @endif
                 </ul>
             </div>
@@ -99,12 +103,12 @@
         @yield('content')
     </div>
     <script>
-        document.getElementById('toggleSidebar').addEventListener('click', function () {
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const content = document.querySelector('.content');
-            
+
             sidebar.classList.toggle('collapsed');
-            
+
             if (sidebar.classList.contains('collapsed')) {
                 content.style.marginLeft = '80px';
             } else {
@@ -113,4 +117,5 @@
         });
     </script>
 </body>
+
 </html>

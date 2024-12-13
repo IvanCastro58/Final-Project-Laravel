@@ -19,10 +19,17 @@ class EmployeeSeeder extends Seeder
             'password' => bcrypt('password123'),
             'role' => 'admin',
         ]);
-        
+
         Employee::create([
             'name' => 'Ivan Castro',
             'email' => 'cipcastro123@gmail.com',
+            'password' => bcrypt('password123'),
+            'role' => 'employee',
+        ]);
+
+        Employee::create([
+            'name' => 'Joshua Embestro',
+            'email' => 'joshuaembestro12345@gmail.com',
             'password' => bcrypt('password123'),
             'role' => 'employee',
         ]);
