@@ -7,10 +7,21 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'showHomePage'])->name('welcome');
 
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+
+Route::get('/reserve', [ReservationController::class, 'showReservationForm']);
+Route::post('/reserve', [ReservationController::class, 'submitReservation'])->name('reservation.submit');
+Route::post('/reservation/submit', [ReservationController::class, 'store'])->name('reservation.submit');
+
+
 
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

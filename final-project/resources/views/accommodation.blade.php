@@ -35,7 +35,7 @@
                     <tbody>
                         @forelse ($accommodations as $accommodation)
                             <tr>
-                                <td>{{ $accommodation->id }}</td>
+                                <td>{{ $accommodation->accommodation_id }}</td>
                                 <td>{{ $accommodation->accommodation_name }}</td>
                                 <td>
                                     @if ($accommodation->image)
