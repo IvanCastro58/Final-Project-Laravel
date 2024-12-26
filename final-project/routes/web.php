@@ -15,6 +15,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/employee', [EmployeeController::class, "display"])->name('employee');
+Route::post('/send-invitation', [EmployeeController::class, 'sendInvitation'])->name('sendInvitation');
+Route::get('/register/{token}', [EmployeeController::class, 'showRegistrationForm'])->name('registerForm');
+Route::post('/register/{token}', [EmployeeController::class, 'registerAccount'])->name('registerAccount');
 
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.logs');
 
