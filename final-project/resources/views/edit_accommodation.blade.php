@@ -30,6 +30,19 @@
                 <option value="0" {{ $accommodation->availability_status == 0 ? 'selected' : '' }}>Not Available</option>
             </select>
         </div>
+
+        @if ($accommodation->image)
+        <div class="mb-3">
+            <label for="current_image" class="form-label">Current Image</label>
+            <img src="{{ asset('storage/' . $accommodation->image) }}" alt="Accommodation Image" class="img-thumbnail" width="150">
+        </div>
+        @endif
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Update Image (Optional)</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+        </div>
+
         <button type="submit" class="btn btn-primary">Update Accommodation</button>
     </form>
 </div>

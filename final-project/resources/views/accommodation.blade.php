@@ -20,7 +20,7 @@
             <h5 class="fw-bold" style="color: #3B83FB;">Accommodation Table</h5>
             <div class="card-body">
                 <table class="table table-white mt-3 px-3">
-                    <thead class="table-secondary">
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Accommodation Name</th>
@@ -40,7 +40,6 @@
                                 <td>
                                     @if ($accommodation->image)
                                         <img src="{{ asset('storage/' . $accommodation->image) }}" alt="Accommodation Image" 
-                                             class="rounded-circle border" 
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     @else
                                         <span>No Image</span>
@@ -89,4 +88,15 @@
             </div>
         </div>
     </div>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 @endsection
