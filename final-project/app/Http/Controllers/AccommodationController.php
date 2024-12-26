@@ -6,6 +6,7 @@ use App\Models\Accommodation;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
+
 class AccommodationController extends Controller
 {
     public function display(Request $request)
@@ -115,4 +116,9 @@ class AccommodationController extends Controller
 
         return redirect('/accommodation')->with('success', 'Accommodation deleted successfully.');
     }
+    public function index() {
+        $accommodations = Accommodation::all(); // Fetch data from the database
+        return view('home', compact('accommodations'));
+    }
+    
 }
