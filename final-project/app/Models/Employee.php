@@ -16,6 +16,8 @@ class Employee extends Model
         "email",
         "password",
         "role",
+        "status",
+        "remember_token",
     ];
 }
 

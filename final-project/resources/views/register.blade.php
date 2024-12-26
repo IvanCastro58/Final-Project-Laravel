@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Laravel Registration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -56,39 +56,59 @@
         }
     </style>
 </head>
-<body class="font-sans ">
+<body class="font-sans">
     <section class="vh-100 d-flex flex-column justify-content-center align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-sunset-fill mb-2" viewBox="0 0 16 16">
-            <path d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM11.709 11.5a4 4 0 1 0-7.418 0H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10m13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-person-plus-fill mb-2" viewBox="0 0 16 16">
+            <path d="M1 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H1zm4-3c-2.5 0-4 .943-4 2h8c0-1.057-1.5-2-4-2zM7 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+            <path fill-rule="evenodd" d="M13 5a.5.5 0 0 1 .5.5v2H15a.5.5 0 0 1 0 1h-1.5v2a.5.5 0 0 1-1 0V8.5H11a.5.5 0 0 1 0-1h1.5v-2A.5.5 0 0 1 13 5z"/>
         </svg>
         <div class="card shadow py-4 px-3" style="max-width: 500px; width: 100%; border: none; border-radius: 10px;">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <h1 class="h2 fw-bold">LOGIN</h1>
+                    <h1 class="h2 fw-bold">REGISTER</h1>
                 </div>
-                <form method="POST" action="{{ route('login.submit') }}">
+                <form method="POST" action="{{ route('registerAccount', ['token' => $token]) }}">
                     @csrf
-                    <!-- Email Input -->
-                    @error('email')
-                        <div class="alert alert-danger fw-semibold d-flex align-items-center">
-                            <i class="bi bi-exclamation-circle-fill me-2"></i>
-                            <small>{{ $message }}</small>
+                    
+                    <!-- Display Errors -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger fw-semibold">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li><small>{{ $error }}</small></li>
+                                @endforeach
+                            </ul>
                         </div>
-                    @enderror
+                    @endif
+
+                    <!-- Name Input -->
                     <div class="custom-input">
-                        <input type="email" name="email" id="email" required placeholder=" " value="{{ old('email') }}">
+                        <input type="text" name="name" id="name" required placeholder=" " value="{{ old('name') }}">
+                        <label for="name">Name</label>
+                    </div>
+
+                    <!-- Email Input (readonly since email comes from the invite) -->
+                    <div class="custom-input">
+                        <input type="email" name="email" id="email" placeholder=" " value="{{ $employee->email }}" readonly>
                         <label for="email">Email</label>
                     </div>
-                    
+
+                    <!-- Password Input -->
                     <div class="custom-input">
                         <input type="password" name="password" id="password" required placeholder=" ">
                         <label for="password">Password</label>
+                    </div>
+
+                    <!-- Confirm Password Input -->
+                    <div class="custom-input">
+                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder=" ">
+                        <label for="password_confirmation">Confirm Password</label>
                     </div>
                     
                     <!-- Submit Button -->
                     <div class="flex justify-center">
                         <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md shadow-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 text-sm fw-semibold">
-                            LOG IN
+                            REGISTER
                         </button>
                     </div>
                 </form>
