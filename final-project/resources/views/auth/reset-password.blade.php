@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Reset Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -25,7 +25,6 @@
             background-color: transparent;
             width: 100%;
         }
-
         .custom-input input:focus {
             border: 2px solid #4285F4; 
         }
@@ -56,40 +55,41 @@
         }
     </style>
 </head>
-<body class="font-sans ">
+<body class="font-sans">
     <section class="vh-100 d-flex flex-column justify-content-center align-items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-sunset-fill mb-2" viewBox="0 0 16 16">
             <path d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM11.709 11.5a4 4 0 1 0-7.418 0H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10m13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
         </svg>
-        <div class="card shadow py-4 px-3" style="max-width: 500px; width: 100%; border: none; border-radius: 10px;">
+        <div class="card shadow py-4 px-3" style="max-width: 600px; width: 100%; border: none; border-radius: 10px;">
             <div class="card-body p-4">
-                <div class="text-center mb-4">
-                    <h1 class="h2 fw-bold">LOGIN</h1>
+                <div class="mb-4">
+                    <h1 class="h2 fw-bold mb-3">Reset Password</h1>
+                    <p class="text-muted" style="font-size: 0.9rem;">Enter a new password for your account.</p>
                 </div>
-                <form method="POST" action="{{ route('login.submit') }}">
+                <form method="POST" action="{{ route('password.update') }}">
                     @csrf
-                    <!-- Email Input -->
-                    @error('email')
+                    @method('POST') 
+                    @error('password')
                         <div class="alert alert-danger fw-semibold d-flex align-items-center">
                             <i class="bi bi-exclamation-circle-fill me-2"></i>
                             <small>{{ $message }}</small>
                         </div>
                     @enderror
-                    <div class="custom-input">
-                        <input type="email" name="email" id="email" required placeholder=" " value="{{ old('email') }}">
-                        <label for="email">Email</label>
-                    </div>
-                    
+                    <input type="hidden" name="token" value="{{ $token }}">
+
                     <div class="custom-input">
                         <input type="password" name="password" id="password" required placeholder=" ">
-                        <label for="password">Password</label>
+                        <label for="password">New Password</label>
                     </div>
-                    
-                    <!-- Submit Button -->
-                    <div class="flex justify-between align-items-center">
-                        <a href="/forgot-password" class="text-sm text-primary hover:underline">Forgot Password?</a>
+
+                    <div class="custom-input">
+                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder=" ">
+                        <label for="password_confirmation">Confirm New Password</label>
+                    </div>
+
+                    <div class="flex justify-center align-items-center">
                         <button type="submit" class="px-4 py-2 bg-primary text-white rounded-md shadow-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 text-sm fw-semibold">
-                            LOG IN
+                            Reset Password
                         </button>
                     </div>
                 </form>

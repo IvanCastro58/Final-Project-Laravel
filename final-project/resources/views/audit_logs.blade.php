@@ -13,7 +13,7 @@
         <div class="bg-white pt-4 px-4 wrapper-table mt-4">
             <h5 class="fw-bold" style="color: #3B83FB;">Audit Logs</h5>
             <table class="table table-white mt-3 px-3">
-                <thead class="table-secondary">
+                <thead>
                     <tr>
                         <th>Performed By</th>
                         <th>Action</th>

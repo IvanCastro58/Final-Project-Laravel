@@ -20,8 +20,8 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             outline: none;
-            padding: 12px;
-            font-size: 12px;
+            padding: 14px;
+            font-size: 14px;
             background-color: transparent;
             width: 100%;
         }
@@ -33,7 +33,7 @@
             position: absolute;
             top: 50%;
             left: 12px;
-            font-size: 12px;
+            font-size: 14px;
             color: #aaa;
             transition: all 0.3s ease;
             pointer-events: none;
@@ -42,7 +42,7 @@
         .custom-input input:focus + label,
         .custom-input input:not(:placeholder-shown) + label {
             top: -2px;
-            font-size: 10px;
+            font-size: 12px;
             color: #4285F4;
             background: #ffffff;
             padding: 0 5px;
@@ -58,14 +58,14 @@
 </head>
 <body class="font-sans">
     <section class="vh-100 d-flex flex-column justify-content-center align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-person-plus-fill mb-2" viewBox="0 0 16 16">
-            <path d="M1 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H1zm4-3c-2.5 0-4 .943-4 2h8c0-1.057-1.5-2-4-2zM7 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-            <path fill-rule="evenodd" d="M13 5a.5.5 0 0 1 .5.5v2H15a.5.5 0 0 1 0 1h-1.5v2a.5.5 0 0 1-1 0V8.5H11a.5.5 0 0 1 0-1h1.5v-2A.5.5 0 0 1 13 5z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-sunset-fill mb-2" viewBox="0 0 16 16">
+            <path d="M7.646 4.854a.5.5 0 0 0 .708 0l1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V1.5a.5.5 0 0 0-1 0v1.793l-.646-.647a.5.5 0 1 0-.708.708zm-5.303-.51a.5.5 0 0 1 .707 0l1.414 1.413a.5.5 0 0 1-.707.707L2.343 5.05a.5.5 0 0 1 0-.707zm11.314 0a.5.5 0 0 1 0 .706l-1.414 1.414a.5.5 0 1 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zM11.709 11.5a4 4 0 1 0-7.418 0H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1h-3.79zM0 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 10m13 0a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
         </svg>
         <div class="card shadow py-4 px-3" style="max-width: 500px; width: 100%; border: none; border-radius: 10px;">
             <div class="card-body p-4">
-                <div class="text-center mb-4">
+                <div class="mb-4">
                     <h1 class="h2 fw-bold">REGISTER</h1>
+                    <p>Fill up the fields to complete the registration</p>
                 </div>
                 <form method="POST" action="{{ route('registerAccount', ['token' => $token]) }}">
                     @csrf

@@ -20,7 +20,7 @@
                     <th>Description</th>
                     <th>Price per Use</th>
                     <th>Image</th>
-                    <th>Actions</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,12 +37,12 @@
                         @endif
                     </td>
                     <td>
-                        <div class="d-flex justify-content-evenly">
-                            <a href="{{ route('amenities.edit', $amenity->amenity_id) }}" class="btn btn-info text-white btn-sm"><i class="bi bi-pencil-square"></i></a>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ route('amenities.edit', $amenity->amenity_id) }}" class="btn btn-info text-white btn-sm rounded-pill"><i class="bi bi-pencil-square"></i></a>
                             <form action="{{ route('amenities.destroy', $amenity->amenity_id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger text-white btn-sm" onclick="return confirm('Are you sure?')"><i class="bi bi-trash3"></i></button>
+                                <button type="submit" class="btn btn-danger text-white btn-sm rounded-pill" onclick="return confirm('Are you sure?')"><i class="bi bi-trash3"></i></button>
                             </form>
                         </div>
                     </td>
@@ -59,4 +59,16 @@
         </div>
     </div>
 </div>
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: "{{ session('success') }}",
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Amenity;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,7 +46,14 @@ class AmenityController extends Controller
             $data['image'] = $imagePath;
         }
 
-        Amenity::create($data);
+        $amenity = Amenity::create($data);
+
+        $employeeId = session('employee')['id'];
+        AuditLog::create([
+            'action' => 'Create',
+            'description' => "Amenity with ID {$amenity->amenity_id} added successfully.",
+            'performed_by' => $employeeId,
+        ]);
 
         return redirect()->route('amenities.index')->with('success', 'Amenity created successfully.');
     }
@@ -77,6 +85,13 @@ class AmenityController extends Controller
 
         $amenity->update($data);
 
+        $employeeId = session('employee')['id'];
+        AuditLog::create([
+            'action' => 'Update',
+            'description' => "Amenity with ID {$amenity->amenity_id} updated successfully.",
+            'performed_by' => $employeeId,
+        ]);
+
         return redirect()->route('amenities.index')->with('success', 'Amenity updated successfully.');
     }
 
@@ -84,6 +99,13 @@ class AmenityController extends Controller
     public function destroy($id)
     {
         $amenity = Amenity::findOrFail($id);
+
+        $employeeId = session('employee')['id'];
+        AuditLog::create([
+            'action' => 'Delete',
+            'description' => "Amenity with ID {$amenity->amenity_id} deleted successfully.",
+            'performed_by' => $employeeId,
+        ]);
         $amenity->delete();
         return redirect()->route('amenities.index')->with('success', 'Amenity deleted successfully.');
     }

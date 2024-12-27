@@ -6,6 +6,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AmenityController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\HomeController;
 
@@ -32,6 +33,11 @@ Route::get('/register/{token}', [EmployeeController::class, 'showRegistrationFor
 Route::post('/register/{token}', [EmployeeController::class, 'registerAccount'])->name('registerAccount');
 
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.logs');
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
 Route::get('/accommodation', [AccommodationController::class, "display"]);
 Route::get('/accommodation/create', [AccommodationController::class, 'create']);
