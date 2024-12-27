@@ -15,6 +15,7 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
+Route::get('/accommodation/{accommodation_id}', [AccommodationController::class, 'show'])->name('accommodation.show');
 
 Route::get('/reserve', [ReservationController::class, 'showReservationForm']);
 Route::post('/reserve', [ReservationController::class, 'submitReservation'])->name('reservation.submit');

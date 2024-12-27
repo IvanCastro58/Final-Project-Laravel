@@ -121,4 +121,11 @@ class AccommodationController extends Controller
         return view('home', compact('accommodations'));
     }
     
+    public function show($accommodation_id)
+    {
+        $room = Accommodation::findOrFail($accommodation_id); // Fetch the room details by ID
+        $accommodations = Accommodation::where('accommodation_id', '!=', $accommodation_id)->take(5)->get(); // Fetch other rooms, excluding the current one
+        return view('accommodation.show', compact('room', 'accommodations')); // Pass both room and accommodations to the view
+    }
+    
 }
