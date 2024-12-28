@@ -18,13 +18,15 @@ class EmployeeSeeder extends Seeder
             'email' => 'john.doe@example.com',
             'password' => bcrypt('password123'),
             'role' => 'admin',
+            'status' => 'active',
         ]);
 
         Employee::create([
             'name' => 'Ivan Castro',
             'email' => 'cipcastro123@gmail.com',
             'password' => bcrypt('password123'),
-            'role' => 'employee',
+            'role' => 'admin',
+            'status' => 'active',
         ]);
 
         Employee::create([
@@ -32,6 +34,7 @@ class EmployeeSeeder extends Seeder
             'email' => 'joshuaembestro12345@gmail.com',
             'password' => bcrypt('password123'),
             'role' => 'employee',
+            'status' => 'active',
         ]);
 
         Employee::create([
@@ -39,6 +42,7 @@ class EmployeeSeeder extends Seeder
             'email' => 'bli8tzgt@gmail.com',
             'password' => bcrypt('password123'),
             'role' => 'employee',
+            'status' => 'active',
         ]);
     }
 }

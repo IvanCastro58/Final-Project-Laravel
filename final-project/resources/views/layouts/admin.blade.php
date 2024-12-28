@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>Resort Reservation System</title>
+    <title>Going Resort</title>
 </head>
 
 <body class="bg-body-secondary">
@@ -18,7 +18,7 @@
             <button class="btn btn-white toggle-btn" id="toggleSidebar">
                 <i class="bi bi-list"></i>
             </button>
-            <h5 class="mb-0">RESORT RESERVATION SYSTEM</h5>
+            <h5 class="mb-0">GOING RESORT</h5>
             <div class="dropdown">
                 @if(session('employee'))
                 <button class="btn btn-primary d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,7 +55,7 @@
                         NAV TITLE
                     </div>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->is('reservation') ? 'active' : '' }}">
+                        <a href="/reservations/index" class="nav-link {{ request()->is('reservations/index') ? 'active' : '' }}">
                             <i class="bi bi-calendar2-minus"></i>
                             <span class="nav-text">Reservation</span>
                         </a>

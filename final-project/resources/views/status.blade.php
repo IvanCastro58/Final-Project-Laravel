@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resort Name - Home</title>
+    <title>Going Resort - Reservation Status</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet"> 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> 
@@ -185,13 +185,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#"><span>Home</span></a>
+                    <a class="nav-link active" aria-current="page" href="/"><span>Home</span></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#rooms"><span>Rooms</span></a>
+                    <a class="nav-link" href="/#rooms"><span>Rooms</span></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#amenities"><span>Amenities</span></a>
+                    <a class="nav-link" href="/#amenities"><span>Amenities</span></a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link" href="/status"><span>Reservation Status</span></a>
@@ -200,108 +200,47 @@
             </div>
         </div>
     </nav>
-    
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="hero-text">
-            <h1>Welcome to Going Resort</h1>
-        </div>
-        <a href="/reserve" class="btn-hero">Book Now</a>
-    </div>
-
-    <!-- Featured Rooms Grid -->
-    <section class="container py-5 mb-5" id="rooms">
-        <div class="short-bar"></div>
-        <h2 class="text-center">Our Rooms</h2>
-        <div class="short-bar"></div>
-        <div class="card-deck-container">
-            <div class="card-deck" id="roomsCarousel">
-                @foreach ($accommodations as $room)
-                    <div class="card">
-                        <img src="{{ Storage::url($room->image) }}" class="card-img-top" alt="{{ $room->accommodation_name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $room->accommodation_name }}</h5>
-                            <p class="card-text">{{ $room->description }}</p>
-                            <p class="card-text"><strong>Capacity:</strong> {{ $room->capacity }} guests</p>
-                            <p class="card-text"><strong>Price per Night:</strong> PHP {{ number_format($room->price_per_night, 2) }}</p>
-                            <div class="d-flex justify-content-end">
-                                <a href="{{ route('accommodation.show', $room->accommodation_id) }}" class="btn" style="background-color: #F4961A; color: white;">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Track Your Reservation Status</h1>
+        <form action="{{ route('status') }}" method="GET" class="mb-4">
+            <div class="mb-3">
+                <label for="reservation_id" class="form-label">Reservation ID</label>
+                <input type="text" name="reservation_id" id="reservation_id" class="form-control" placeholder="Enter your Reservation ID" required>
             </div>
-            <button class="carousel-button prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-            <button class="carousel-button next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
-        </div>
-    </section>
+            <button type="submit" class="btn btn-primary">Check Status</button>
+        </form>
 
-    <!-- Amenities Grid -->
-    <section class="container py-5" id="amenities">
-        <div class="short-bar"></div>
-        <h2 class="text-center">Our Amenities</h2>
-        <div class="short-bar"></div>
-        <div class="card-deck">
-            @foreach ($amenities as $amenity)
-                <div class="card amenities-card">
-                    <img src="{{ Storage::url($amenity->image) }}" class="card-img-top" alt="{{ $amenity->amenity_name }}">
-                    <div class="card-body amenities-card-body">
-                        <h5 class="card-title">{{ $amenity->amenity_name }}</h5>
-                        <p class="card-text">{{ $amenity->description }}</p>
-                        <p class="card-text"><strong>Price per Use:</strong> PHP {{ number_format($amenity->price_per_use, 2) }}</p>
-                    </div>
+        @if($reservation)
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    Reservation Details
                 </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Bootstrap JS (Ensure you have this included) -->
+                <div class="card-body">
+                    <p><strong>Name:</strong> {{ $reservation->name }}</p>
+                    <p><strong>Email:</strong> {{ $reservation->email }}</p>
+                    <p><strong>Phone:</strong> {{ $reservation->phone }}</p>
+                    <p><strong>Room:</strong> {{ $reservation->room }}</p>
+                    <p><strong>Check-in:</strong> {{ $reservation->check_in }}</p>
+                    <p><strong>Check-out:</strong> {{ $reservation->check_out }}</p>
+                    <p><strong>Guests:</strong> {{ $reservation->guests }}</p>
+                    <p><strong>Total Price:</strong> {{ $reservation->total_price }}</p>
+                    <p><strong>Status:</strong> 
+                        <span 
+                            class="badge 
+                            {{ $reservation->status === 'cancelled' ? 'bg-danger' : '' }} 
+                            {{ $reservation->status === 'approved' ? 'bg-success' : '' }} 
+                            {{ $reservation->status === 'processing' ? 'bg-primary' : '' }}"
+                            style="text-transform: capitalize;">
+                            {{ $reservation->status }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        @elseif(request()->has('reservation_id'))
+            <div class="alert alert-danger">No reservation found with the provided Reservation ID.</div>
+        @endif
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
-    <script>
-        let currentIndex = 0;
-const cards = document.querySelectorAll('#roomsCarousel .card');
-const totalCards = cards.length;
-const cardsPerPage = 3;
-
-// Function to show cards based on the current index
-function showCards(startIndex) {
-    cards.forEach((card, index) => {
-        if (index >= startIndex && index < startIndex + cardsPerPage) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-}
-
-// Next button click event
-document.getElementById('nextBtn').addEventListener('click', () => {
-    currentIndex += cardsPerPage;
-
-    // If the currentIndex exceeds the total number of cards, loop back to the start
-    if (currentIndex >= totalCards) {
-        currentIndex = 0;
-    }
-    showCards(currentIndex);
-});
-
-// Previous button click event
-document.getElementById('prevBtn').addEventListener('click', () => {
-    currentIndex -= cardsPerPage;
-
-    // If the currentIndex is below 0, loop back to the last set of cards
-    if (currentIndex < 0) {
-        currentIndex = totalCards - cardsPerPage;
-    }
-    showCards(currentIndex);
-});
-
-// Show initial cards
-showCards(currentIndex);
-
-    </script>
-
 </body>
 </html>

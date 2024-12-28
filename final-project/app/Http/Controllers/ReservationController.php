@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Accommodation;
 use App\Models\Reservation;
 use App\Models\Amenity;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ReservationController extends Controller
 {
@@ -19,7 +20,6 @@ class ReservationController extends Controller
     }
     public function submitReservation(Request $request)
     {
-        // Validate the incoming data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -29,29 +29,22 @@ class ReservationController extends Controller
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
             'amenities' => 'nullable|array',
-            'amenities.*' => 'exists:amenity,amenity_id', // Validate by amenity_id
+            'amenities.*' => 'exists:amenity,amenity_id',
         ]);
-        
-        // Find the selected accommodation
+
         $accommodation = Accommodation::where('accommodation_name', $validated['room'])->firstOrFail();
-        
-        // Calculate the total price (you can modify this logic as needed)
+
         $totalPrice = $accommodation->price_per_night * (strtotime($validated['check_out']) - strtotime($validated['check_in'])) / (60 * 60 * 24);
-        
-        // If amenities are selected, calculate the total price for selected amenities
+
+        $amenityNames = [];
         if ($request->has('amenities')) {
-            $amenityIds = $validated['amenities']; // Array of amenity IDs
-            // Get the amenity names using the amenity IDs
-            $amenityNames = Amenity::whereIn('amenity_id', $amenityIds)->pluck('amenity_name')->toArray();
-            
-            // Add amenities price to the total price
-            $totalPrice += Amenity::whereIn('amenity_id', $amenityIds)->sum('price_per_use');
-            
-            // Save the amenity names in the reservation
-            $validated['amenities'] = $amenityNames;
+            $amenities = Amenity::whereIn('amenity_id', $validated['amenities'])->get();
+            $amenityNames = $amenities->pluck('amenity_name')->toArray();
+            $totalPrice += $amenities->sum('price_per_use');
         }
-        
-        // Create the reservation with amenity names instead of IDs
+
+        $reservationId = 'RES-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+
         $reservation = Reservation::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -60,22 +53,46 @@ class ReservationController extends Controller
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
-            // Store amenity names in the database (not IDs)
-            'amenities' => json_encode($validated['amenities'] ?? []),
-            'total_price' => $totalPrice,  // Assuming the total price column is added
-            'status' => 'processing', // Set the default status
+            'amenities' => json_encode($amenityNames),
+            'total_price' => $totalPrice,
+            'reservation_id' => $reservationId,
+            'status' => 'processing',
         ]);
-        
-        // Redirect to the receipt page after reservation is created
+
         return redirect()->route('reservation.receipt', ['id' => $reservation->id]);
     }
-    
-    public function showReceipt($id)
-{
-    // Retrieve the reservation using the ID
-    $reservation = Reservation::findOrFail($id);
 
-    // Pass the reservation to the view
-    return view('receipt', compact('reservation'));
-}
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string|in:processing,approved,cancelled',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+        $reservation->update(['status' => $validated['status']]);
+
+        $employeeId = session('employee')['id'];
+
+        AuditLog::create([
+            'action' => 'Update',
+            'description' => "Reservation with ID {$reservation->reservation_id} status updated to " . strtoupper($validated['status']) . ".",
+            'performed_by' => $employeeId,
+        ]);
+
+        return redirect()->route('reservations.index')->with('success', 'Reservation status updated successfully.');
+
+        
+    }
+
+    public function showReceipt($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        return view('receipt', compact('reservation'));
+    }
+
+    public function index()
+    {
+        $reservations = Reservation::paginate(10); 
+        return view('reservations.index', compact('reservations'));
+    }
 }

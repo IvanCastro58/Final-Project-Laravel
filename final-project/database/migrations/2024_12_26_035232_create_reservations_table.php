@@ -14,19 +14,19 @@ class CreateReservationsTable extends Migration
     public function up()
     {
         Schema::create('reservations', function (Blueprint $table) {
-            $table->id(); // Primary key
-            $table->foreignId('accommodation_id')
-                ->constrained('accommodations') // Foreign key for accommodations
-                ->onDelete('cascade');
+            $table->id(); 
             $table->string('name');
             $table->string('email');
             $table->string('phone');
+            $table->string('room');
             $table->date('check_in');
             $table->date('check_out');
             $table->integer('guests');
+            $table->string('status')->default('processing');
+            $table->string('reservation_id')->unique(); 
             $table->decimal('total_price', 10, 2);
-            $table->json('amenities')->nullable(); // JSON column for amenity details
-            $table->timestamps(); // Created at and updated at
+            $table->json('amenities')->nullable(); 
+            $table->timestamps(); 
         });
     }
     /**
