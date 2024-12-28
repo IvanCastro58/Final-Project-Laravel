@@ -20,61 +20,29 @@ class ReservationController extends Controller
 
     public function submitReservation(Request $request)
     {
+        // Validate the incoming data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
-            'room' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $accommodation = DB::table('accommodations')
-                        ->select('accommodation_name', 'price_per_night')
-                        ->where('accommodation_name', $value)
-                        ->first();
-    
-                    if (!$accommodation) {
-                        $fail('The selected room is invalid.');
-                    }
-                }
-            ],
+            'room' => 'required|exists:accommodations,accommodation_name',
             'check_in' => 'required|date|after_or_equal:today',
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
             'amenities' => 'nullable|array',
-            'amenities.*' => 'exists:amenities,amenity_id',
+            'amenities.*' => 'exists:amenity,amenity_id',
         ]);
     
-        $accommodation = Accommodation::where('accommodation_name', $validated['room'])->first();
+        // Find the selected accommodation
+        $accommodation = Accommodation::where('accommodation_name', $validated['room'])->firstOrFail();
     
-        if (!$accommodation || $accommodation->price_per_night === null) {
-            return redirect()->back()->withErrors(['room' => 'Accommodation price is not set.']);
+        // Calculate the total price (you can modify this logic as needed)
+        $totalPrice = $accommodation->price_per_night * (strtotime($validated['check_out']) - strtotime($validated['check_in'])) / (60 * 60 * 24);
+        if ($request->has('amenities')) {
+            $totalPrice += Amenity::whereIn('amenity_id', $validated['amenities'])->sum('price_per_use');
         }
     
-        $checkIn = new \DateTime($validated['check_in']);
-        $checkOut = new \DateTime($validated['check_out']);
-        $nights = $checkOut->diff($checkIn)->days;
-    
-        $totalPrice = $nights * $accommodation->price_per_night;
-    
-        $amenityDetails = [];
-        if (!empty($validated['amenities'])) {
-            foreach ($validated['amenities'] as $amenityId) {
-                $amenity = Amenity::find($amenityId);
-                if ($amenity) {
-                    $amenityDetails[] = [
-                        'id' => $amenity->amenity_id,
-                        'name' => $amenity->amenity_name,
-                        'price' => $amenity->price_per_use,
-                    ];
-                    $totalPrice += $amenity->price_per_use;
-                }
-            }
-        }
-    
-        if (!$totalPrice || $totalPrice <= 0) {
-            return redirect()->back()->withErrors(['total_price' => 'Total price calculation failed.']);
-        }
-    
+        // Create the reservation
         $reservation = Reservation::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -83,37 +51,20 @@ class ReservationController extends Controller
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
-            'total_price' => $totalPrice,
-            'amenities' => json_encode($amenityDetails),
+            'amenities' => json_encode($validated['amenities'] ?? []),
+            'total_price' => $totalPrice,  // Assuming the total price column is added
+            'status' => 'processing', // Set the default status
         ]);
     
-        return redirect()->route('reservation.receipt', ['reservation' => $reservation->id]);
+        // Redirect to the receipt page after reservation is created
+        return redirect()->route('reservation.receipt', ['id' => $reservation->id]);
     }
-    
-
-    public function store(Request $request)
+    public function showReceipt($id)
 {
-    // Validation and saving logic here
-    $reservation = new Reservation();
-    $reservation->name = $request->name;
-    $reservation->email = $request->email;
-    $reservation->phone = $request->phone;
-    $reservation->room = $request->room;
-    $reservation->check_in = $request->check_in;
-    $reservation->check_out = $request->check_out;
-    $reservation->total_price =$request->totalPrice;
-    $reservation->guests = $request->guests;
-    $reservation->amenities = json_encode($request->amenities); // or however you want to store amenities
-    $reservation->save();
+    // Retrieve the reservation using the ID
+    $reservation = Reservation::findOrFail($id);
 
-    // Redirect to the confirmation page with the reservation data
-    return redirect()->route('reservation.confirmation', ['id' => $reservation->id]);
-}
-
-
-    public function showReceipt(Reservation $reservation)
-{
+    // Pass the reservation to the view
     return view('receipt', compact('reservation'));
 }
-
 }

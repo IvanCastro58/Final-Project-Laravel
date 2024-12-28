@@ -62,7 +62,7 @@
             <div class="col-md-8">
                 <div class="reservation-form">
                     <h2 class="text-center mb-4">Reservation Details</h2>
-                    <form action="{{ route('reservation.submit') }}" method="POST">
+                    <form action="{{ url('/reserve/submit') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">

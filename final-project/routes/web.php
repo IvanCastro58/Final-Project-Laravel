@@ -18,11 +18,9 @@ Route::get('/login', function () {
 
 Route::get('/accommodation/{accommodation_id}', [AccommodationController::class, 'show'])->name('accommodation.show');
 
-Route::get('/reserve', [ReservationController::class, 'showReservationForm']);
-Route::post('/reserve', [ReservationController::class, 'submitReservation'])->name('reservation.submit');
-Route::post('/reservation/submit', [ReservationController::class, 'store'])->name('reservation.submit');
-
-
+Route::get('/reserve', [ReservationController::class, 'showReservationForm'])->name('reservation.form');
+Route::post('/reserve/submit', [ReservationController::class, 'submitReservation'])->name('reservation.submit');
+Route::get('/reserve/receipt/{id}', [ReservationController::class, 'showReceipt'])->name('reservation.receipt');
 
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
