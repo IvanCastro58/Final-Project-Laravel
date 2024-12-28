@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    td{
+        font-size: small;
+    }
+</style>
 <div class="container-fluid mt-5 flex-grow-1 p-5 content">
     <h2 class="fw-bold">Manage Amenities</h2>
     <p class="text-secondary fw-semibold">Here’s where you manage the content for amenities.</p>
