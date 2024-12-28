@@ -63,9 +63,9 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-evenly">
-                                        <a href="/accommodation/{{ $accommodation->id }}/edit" 
+                                        <a href="/accommodation/{{ $accommodation->accommodation_id }}/edit" 
                                            class="btn btn-info text-white btn-sm rounded-pill"><i class="bi bi-pencil-square"></i></a>
-                                        <form action="/accommodation/{{ $accommodation->id }}" method="POST" style="display:inline;">
+                                        <form action="/accommodation/{{ $accommodation->accommodation_id }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 

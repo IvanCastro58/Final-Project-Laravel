@@ -59,24 +59,24 @@ class AccommodationController extends Controller
 
         AuditLog::create([
             'action' => 'Create',
-            'description' => "Accommodation with ID {$accommodation->id} added successfully.",
+            'description' => "Accommodation with ID {$accommodation->accommodation_id} added successfully.",
             'performed_by' => $employeeId,
         ]);
 
         return redirect('/accommodation')->with('success', 'Accommodation added successfully.');
     }
 
-    public function edit($id)
+    public function edit($accommodation_id)
     {
         if (!session('employee')) {
             return redirect()->route('login'); 
         }
 
-        $accommodation = Accommodation::findOrFail($id);
+        $accommodation = Accommodation::findOrFail($accommodation_id);
         return view('edit_accommodation', compact('accommodation'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $accommodation_id)
     {
         $request->validate([
             'accommodation_name' => 'required|string|max:255',
@@ -86,7 +86,7 @@ class AccommodationController extends Controller
             'availability_status' => 'required|boolean',
         ]);
 
-        $accommodation = Accommodation::findOrFail($id);
+        $accommodation = Accommodation::findOrFail($accommodation_id);
         $accommodation->update($request->all());
 
         $employeeId = session('employee')['id'];
@@ -100,17 +100,17 @@ class AccommodationController extends Controller
         return redirect('/accommodation')->with('success', 'Accommodation updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy($accommodation_id)
     {
-        $accommodation = Accommodation::findOrFail($id);
-        $accommodationId = $accommodation->id;
+        $accommodation = Accommodation::findOrFail($accommodation_id);
+        $accommodationId = $accommodation->accommodation_id;
         $accommodation->delete();
 
         $employeeId = session('employee')['id'];
 
         AuditLog::create([
             'action' => 'Delete',
-            'description' => "Accommodation with ID {$accommodationId} deleted successfully.",
+            'description' => "Accommodation with ID {$accommodation_id} deleted successfully.",
             'performed_by' => $employeeId,
         ]);
 

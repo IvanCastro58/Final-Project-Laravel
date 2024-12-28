@@ -16,8 +16,6 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::get('/accommodation/{accommodation_id}', [AccommodationController::class, 'show'])->name('accommodation.show');
-
 Route::get('/reserve', [ReservationController::class, 'showReservationForm'])->name('reservation.form');
 Route::post('/reserve/submit', [ReservationController::class, 'submitReservation'])->name('reservation.submit');
 Route::get('/reserve/receipt/{id}', [ReservationController::class, 'showReceipt'])->name('reservation.receipt');
@@ -40,9 +38,10 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'
 Route::get('/accommodation', [AccommodationController::class, "display"]);
 Route::get('/accommodation/create', [AccommodationController::class, 'create']);
 Route::post('/accommodation', [AccommodationController::class, 'store']);
-Route::get('/accommodation/{id}/edit', [AccommodationController::class, 'edit']);
-Route::put('/accommodation/{id}', [AccommodationController::class, 'update']);
-Route::delete('/accommodation/{id}', [AccommodationController::class, 'destroy']);
+Route::get('/accommodation/{accommodation_id}/edit', [AccommodationController::class, 'edit']);
+Route::put('/accommodation/{accommodation_id}', [AccommodationController::class, 'update']);
+Route::delete('/accommodation/{accommodation_id}', [AccommodationController::class, 'destroy']);
+Route::get('/accommodation/{accommodation_id}', [AccommodationController::class, 'show'])->name('accommodation.show');
 
 Route::get('/amenities/index', [AmenityController::class, 'index'])->name('amenities.index');
 Route::get('/amenities/create', [AmenityController::class, 'create'])->name('amenities.create');

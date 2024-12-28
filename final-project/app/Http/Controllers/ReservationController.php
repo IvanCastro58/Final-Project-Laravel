@@ -30,7 +30,7 @@ class ReservationController extends Controller
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
             'amenities' => 'nullable|array',
-            'amenities.*' => 'exists:amenity,amenity_id',
+            'amenities.*' => 'exists:amenity,amenity_id',  // Use 'amenities' table for validation
         ]);
     
         // Find the selected accommodation
@@ -38,11 +38,18 @@ class ReservationController extends Controller
     
         // Calculate the total price (you can modify this logic as needed)
         $totalPrice = $accommodation->price_per_night * (strtotime($validated['check_out']) - strtotime($validated['check_in'])) / (60 * 60 * 24);
+    
+        // Get the amenities selected by the user
+        $amenityNames = [];
         if ($request->has('amenities')) {
-            $totalPrice += Amenity::whereIn('amenity_id', $validated['amenities'])->sum('price_per_use');
+            // Fetch the amenity names corresponding to the amenity_ids
+            $amenities = Amenity::whereIn('amenity_id', $validated['amenities'])->get();
+            $amenityNames = $amenities->pluck('amenity_name')->toArray();  // Get an array of amenity names
+            // Add the price of selected amenities to the total price
+            $totalPrice += $amenities->sum('price_per_use');
         }
     
-        // Create the reservation
+        // Create the reservation with amenity names (instead of amenity IDs)
         $reservation = Reservation::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -51,14 +58,15 @@ class ReservationController extends Controller
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
-            'amenities' => json_encode($validated['amenities'] ?? []),
-            'total_price' => $totalPrice,  // Assuming the total price column is added
-            'status' => 'processing', // Set the default status
+            'amenities' => json_encode($amenityNames),  // Store amenity names as JSON
+            'total_price' => $totalPrice,
+            'status' => 'processing',  // Set the default status
         ]);
     
         // Redirect to the receipt page after reservation is created
         return redirect()->route('reservation.receipt', ['id' => $reservation->id]);
     }
+    
     public function showReceipt($id)
 {
     // Retrieve the reservation using the ID

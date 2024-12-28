@@ -22,6 +22,7 @@
                         <p>Email: {{ $reservation->email }}</p>
                         <p>Phone: {{ $reservation->phone }}</p>
                         <p>Room: {{ $reservation->room }}</p>
+                        <p>Amenities: {{ $reservation->amenities }}</P>
                         <p>Check-In Date: {{ $reservation->check_in }}</p>
                         <p>Check-Out Date: {{ $reservation->check_out }}</p>
                         <p>Number of Guests: {{ $reservation->guests }}</p>
