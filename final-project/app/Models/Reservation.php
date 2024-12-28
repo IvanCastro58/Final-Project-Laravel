@@ -19,6 +19,7 @@ class Reservation extends Model
         'guests',
         'total_price',
         'amenities',
+        'status',
     ];
 
     // The room is no longer a relationship, just a string

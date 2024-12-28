@@ -17,7 +17,6 @@ class ReservationController extends Controller
         $amenities = Amenity::all();  // Get all available amenities
         return view('reserve', compact('accommodations', 'amenities'));
     }
-
     public function submitReservation(Request $request)
     {
         // Validate the incoming data
@@ -30,26 +29,29 @@ class ReservationController extends Controller
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
             'amenities' => 'nullable|array',
-            'amenities.*' => 'exists:amenity,amenity_id',  // Use 'amenities' table for validation
+            'amenities.*' => 'exists:amenity,amenity_id', // Validate by amenity_id
         ]);
-    
+        
         // Find the selected accommodation
         $accommodation = Accommodation::where('accommodation_name', $validated['room'])->firstOrFail();
-    
+        
         // Calculate the total price (you can modify this logic as needed)
         $totalPrice = $accommodation->price_per_night * (strtotime($validated['check_out']) - strtotime($validated['check_in'])) / (60 * 60 * 24);
-    
-        // Get the amenities selected by the user
-        $amenityNames = [];
+        
+        // If amenities are selected, calculate the total price for selected amenities
         if ($request->has('amenities')) {
-            // Fetch the amenity names corresponding to the amenity_ids
-            $amenities = Amenity::whereIn('amenity_id', $validated['amenities'])->get();
-            $amenityNames = $amenities->pluck('amenity_name')->toArray();  // Get an array of amenity names
-            // Add the price of selected amenities to the total price
-            $totalPrice += $amenities->sum('price_per_use');
+            $amenityIds = $validated['amenities']; // Array of amenity IDs
+            // Get the amenity names using the amenity IDs
+            $amenityNames = Amenity::whereIn('amenity_id', $amenityIds)->pluck('amenity_name')->toArray();
+            
+            // Add amenities price to the total price
+            $totalPrice += Amenity::whereIn('amenity_id', $amenityIds)->sum('price_per_use');
+            
+            // Save the amenity names in the reservation
+            $validated['amenities'] = $amenityNames;
         }
-    
-        // Create the reservation with amenity names (instead of amenity IDs)
+        
+        // Create the reservation with amenity names instead of IDs
         $reservation = Reservation::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -58,11 +60,12 @@ class ReservationController extends Controller
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
-            'amenities' => json_encode($amenityNames),  // Store amenity names as JSON
-            'total_price' => $totalPrice,
-            'status' => 'processing',  // Set the default status
+            // Store amenity names in the database (not IDs)
+            'amenities' => json_encode($validated['amenities'] ?? []),
+            'total_price' => $totalPrice,  // Assuming the total price column is added
+            'status' => 'processing', // Set the default status
         ]);
-    
+        
         // Redirect to the receipt page after reservation is created
         return redirect()->route('reservation.receipt', ['id' => $reservation->id]);
     }
