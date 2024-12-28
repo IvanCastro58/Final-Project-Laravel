@@ -219,63 +219,88 @@
     </div>
 
     <script>
-    let roomPrice = 0;
-    let amenitiesPricePerDay = 0;
+let roomPrice = 0;
+let amenitiesPricePerDay = 0;
 
-    function updateCapacity() {
-        var selectedRoom = document.getElementById("room_type").selectedOptions[0];
-        var capacity = selectedRoom ? selectedRoom.getAttribute("data-capacity") : 0;
-        roomPrice = selectedRoom ? parseFloat(selectedRoom.getAttribute("data-price")) : 0;
-        
-        var guestInput = document.getElementById("guests");
-        var guestHelpText = document.getElementById("guestHelp");
+function updateCapacity() {
+    var selectedRoom = document.getElementById("room_type").selectedOptions[0];
+    var capacity = selectedRoom ? selectedRoom.getAttribute("data-capacity") : 0;
+    roomPrice = selectedRoom ? parseFloat(selectedRoom.getAttribute("data-price")) : 0;
+    
+    var guestInput = document.getElementById("guests");
+    var guestHelpText = document.getElementById("guestHelp");
 
-        if (capacity > 0) {
-            guestInput.disabled = false;
-            guestInput.max = capacity;
-            guestHelpText.textContent = "Maximum allowed guests: " + capacity;
-        } else {
-            guestInput.disabled = true;
-            guestInput.value = '';
-            guestHelpText.textContent = "Select a room first to enable this field.";
-        }
-
-        updateTotalPrice();
+    if (capacity > 0) {
+        guestInput.disabled = false;
+        guestInput.max = capacity;
+        guestHelpText.textContent = "Maximum allowed guests: " + capacity;
+    } else {
+        guestInput.disabled = true;
+        guestInput.value = '';
+        guestHelpText.textContent = "Select a room first to enable this field.";
     }
 
-    function updateTotalPrice() {
-        var checkInDate = document.getElementById("check_in").value;
-        var checkOutDate = document.getElementById("check_out").value;
+    updateTotalPrice(); // Update total price after selecting a room
+}
 
-        if (!checkInDate || !checkOutDate || roomPrice === 0) return;
+function updateTotalPrice() {
+    var checkInDate = document.getElementById("check_in").value;
+    var checkOutDate = document.getElementById("check_out").value;
 
-        var checkIn = new Date(checkInDate);
-        var checkOut = new Date(checkOutDate);
+    if (!checkInDate || !checkOutDate || roomPrice === 0) return;
 
-        var timeDiff = checkOut - checkIn;
-        var days = timeDiff / (1000 * 3600 * 24);
+    var checkIn = new Date(checkInDate);
+    var checkOut = new Date(checkOutDate);
 
-        if (days < 1) days = 1; // Ensure at least 1 day
+    var timeDiff = checkOut - checkIn;
+    var days = timeDiff / (1000 * 3600 * 24);
 
-        // Reset amenities price per day
-        amenitiesPricePerDay = 0;
+    if (days < 1) days = 1; // Ensure at least 1 day
 
-        // Calculate amenities cost per day
-        var amenitiesChecked = document.querySelectorAll('input[name="amenities[]"]:checked');
-        amenitiesChecked.forEach(function (checkbox) {
-            var pricePerUse = parseFloat(checkbox.closest('tr').cells[1].innerText.replace('₱', '').replace(',', ''));
-            amenitiesPricePerDay += pricePerUse;
-        });
+    // Reset amenities price per day
+    amenitiesPricePerDay = 0;
 
-        // Calculate total price
-        var totalRoomPrice = roomPrice * days;
-        var totalAmenitiesPrice = amenitiesPricePerDay;
+    // Calculate amenities cost per day
+    var amenitiesChecked = document.querySelectorAll('input[name="amenities[]"]:checked');
+    amenitiesChecked.forEach(function (checkbox) {
+        var pricePerUse = parseFloat(checkbox.closest('tr').cells[1].innerText.replace('₱', '').replace(',', ''));
+        amenitiesPricePerDay += pricePerUse;
+    });
 
-        var totalPrice = totalRoomPrice + totalAmenitiesPrice;
+    // Calculate total price
+    var totalRoomPrice = roomPrice * days;
+    var totalAmenitiesPrice = amenitiesPricePerDay;
 
-        // Display total price
-        document.getElementById("totalPrice").innerText = "₱" + totalPrice.toFixed(2);
+    var totalPrice = totalRoomPrice + totalAmenitiesPrice;
+
+    // Display total price
+    document.getElementById("totalPrice").innerText = "₱" + totalPrice.toFixed(2);
+}
+
+// Add event listener to update total price when amenities are selected or deselected
+document.querySelectorAll('input[name="amenities[]"]').forEach(function (checkbox) {
+    checkbox.addEventListener('change', updateTotalPrice);
+});
+
+// Add event listeners to update total price when check-in or check-out dates are selected
+document.getElementById("check_in").addEventListener('change', function() {
+    var checkInDate = new Date(document.getElementById("check_in").value);
+    var checkOutInput = document.getElementById("check_out");
+
+    // Set the minimum check-out date to be the selected check-in date
+    checkOutInput.min = document.getElementById("check_in").value;
+
+    // If the current check-out date is earlier than the check-in date, update the check-out date
+    if (new Date(checkOutInput.value) < checkInDate) {
+        checkOutInput.value = document.getElementById("check_in").value;
     }
+
+    updateTotalPrice();
+});
+
+document.getElementById("check_out").addEventListener('change', updateTotalPrice);
+
+
     </script>
 
 </body>
