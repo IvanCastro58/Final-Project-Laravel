@@ -19,11 +19,11 @@ class Reservation extends Model
         'guests',
         'total_price',
         'amenities',
+        'reservation_id', 
+        'status',
     ];
 
-    // The room is no longer a relationship, just a string
-    // But you can still use the 'amenities' column as a JSON column
     protected $casts = [
-        'amenities' => 'array',  // Automatically cast the amenities column to an array
+        'amenities' => 'array', 
     ];
 }

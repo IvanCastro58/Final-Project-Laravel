@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'showHomePage'])->name('welcome');
+Route::get('/status', [HomeController::class, 'showStatusPage'])->name('status');
 
 Route::get('/login', function () {
     return view('login');
@@ -42,6 +43,11 @@ Route::get('/accommodation/{accommodation_id}/edit', [AccommodationController::c
 Route::put('/accommodation/{accommodation_id}', [AccommodationController::class, 'update']);
 Route::delete('/accommodation/{accommodation_id}', [AccommodationController::class, 'destroy']);
 Route::get('/accommodation/{accommodation_id}', [AccommodationController::class, 'show'])->name('accommodation.show');
+
+Route::prefix('reservations')->group(function () {
+    Route::get('/index', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::patch('/reservations/{id}', [ReservationController::class, 'updateStatus'])->name('reservations.update');
+});
 
 Route::get('/amenities/index', [AmenityController::class, 'index'])->name('amenities.index');
 Route::get('/amenities/create', [AmenityController::class, 'create'])->name('amenities.create');

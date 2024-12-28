@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Accommodation;
 use App\Models\Reservation;
 use App\Models\Amenity;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ReservationController extends Controller
 {
@@ -20,7 +21,6 @@ class ReservationController extends Controller
 
     public function submitReservation(Request $request)
     {
-        // Validate the incoming data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -30,26 +30,22 @@ class ReservationController extends Controller
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
             'amenities' => 'nullable|array',
-            'amenities.*' => 'exists:amenity,amenity_id',  // Use 'amenities' table for validation
+            'amenities.*' => 'exists:amenity,amenity_id',
         ]);
-    
-        // Find the selected accommodation
+
         $accommodation = Accommodation::where('accommodation_name', $validated['room'])->firstOrFail();
-    
-        // Calculate the total price (you can modify this logic as needed)
+
         $totalPrice = $accommodation->price_per_night * (strtotime($validated['check_out']) - strtotime($validated['check_in'])) / (60 * 60 * 24);
-    
-        // Get the amenities selected by the user
+
         $amenityNames = [];
         if ($request->has('amenities')) {
-            // Fetch the amenity names corresponding to the amenity_ids
             $amenities = Amenity::whereIn('amenity_id', $validated['amenities'])->get();
-            $amenityNames = $amenities->pluck('amenity_name')->toArray();  // Get an array of amenity names
-            // Add the price of selected amenities to the total price
+            $amenityNames = $amenities->pluck('amenity_name')->toArray();
             $totalPrice += $amenities->sum('price_per_use');
         }
-    
-        // Create the reservation with amenity names (instead of amenity IDs)
+
+        $reservationId = 'RES-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+
         $reservation = Reservation::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -58,21 +54,46 @@ class ReservationController extends Controller
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
-            'amenities' => json_encode($amenityNames),  // Store amenity names as JSON
+            'amenities' => json_encode($amenityNames),
             'total_price' => $totalPrice,
-            'status' => 'processing',  // Set the default status
+            'reservation_id' => $reservationId,
+            'status' => 'processing',
         ]);
-    
-        // Redirect to the receipt page after reservation is created
+
         return redirect()->route('reservation.receipt', ['id' => $reservation->id]);
     }
-    
-    public function showReceipt($id)
-{
-    // Retrieve the reservation using the ID
-    $reservation = Reservation::findOrFail($id);
 
-    // Pass the reservation to the view
-    return view('receipt', compact('reservation'));
-}
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string|in:processing,approved,cancelled',
+        ]);
+
+        $reservation = Reservation::findOrFail($id);
+        $reservation->update(['status' => $validated['status']]);
+
+        $employeeId = session('employee')['id'];
+
+        AuditLog::create([
+            'action' => 'Update',
+            'description' => "Reservation with ID {$reservation->reservation_id} status updated to " . strtoupper($validated['status']) . ".",
+            'performed_by' => $employeeId,
+        ]);
+
+        return redirect()->route('reservations.index')->with('success', 'Reservation status updated successfully.');
+
+        
+    }
+
+    public function showReceipt($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        return view('receipt', compact('reservation'));
+    }
+
+    public function index()
+    {
+        $reservations = Reservation::paginate(10); 
+        return view('reservations.index', compact('reservations'));
+    }
 }
