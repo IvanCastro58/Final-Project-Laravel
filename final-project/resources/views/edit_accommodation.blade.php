@@ -4,7 +4,7 @@
 <div class="container-fluid mt-5 flex-grow-1 p-5 content">
     <h2 class="fw-bold">Edit Accommodation</h2>
     <p class="text-secondary fw-semibold mb-4">Update the details below to edit the accommodation information.</p>
-    <form method="POST" action="/accommodation/{{ $accommodation->id }}">
+    <form method="POST" action="/accommodation/{{ $accommodation->accommodation_id }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -31,16 +31,12 @@
             </select>
         </div>
 
-        @if ($accommodation->image)
-        <div class="mb-3">
-            <label for="current_image" class="form-label">Current Image</label>
-            <img src="{{ asset('storage/' . $accommodation->image) }}" alt="Accommodation Image" class="img-thumbnail" width="150">
-        </div>
-        @endif
-
         <div class="mb-3">
             <label for="image" class="form-label">Update Image (Optional)</label>
-            <input type="file" name="image" class="form-control" accept="image/*">
+            <input type="file" class="form-control" id="image" name="image">
+            @if ($accommodation->image)
+            <img src="{{ asset('storage/' . $accommodation->image) }}" alt="Accommodation Image" class="img-thumbnail mt-2" style="max-width: 150px;">
+            @endif
         </div>
 
         <button type="submit" class="btn btn-primary">Update Accommodation</button>

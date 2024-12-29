@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>Going Resort</title>
+    <title>TropiCool Resort</title>
 </head>
 
 <body class="bg-body-secondary">
@@ -19,7 +19,7 @@
             <button class="btn btn-white toggle-btn" id="toggleSidebar">
                 <i class="bi bi-list"></i>
             </button>
-            <h5 class="mb-0">GOING RESORT</h5>
+            <h5 class="mb-0">TropiCool Resort</h5>
             <div class="dropdown">
                 @if(session('employee'))
                 <button class="btn btn-primary d-flex align-items-center" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,12 +71,6 @@
                         <a href="/amenities/index" class="nav-link {{ request()->is('amenities/index') ? 'active' : '' }}">
                             <i class="bi bi-gear"></i>
                             <span class="nav-text">Amenities</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->is('packages') ? 'active' : '' }}">
-                            <i class="bi bi-box-seam"></i>
-                            <span class="nav-text">Packages</span>
                         </a>
                     </li>
                     @if(session('employee') && session('employee')->role === 'admin')

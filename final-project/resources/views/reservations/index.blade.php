@@ -2,7 +2,7 @@
 
 @section('content')
 <style>
-    td{
+    td {
         font-size: small;
     }
 </style>
@@ -70,14 +70,14 @@
 </div>
 
 @if (session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: "{{ session('success') }}",
-            confirmButtonText: 'OK'
-        });
-    </script>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
 @endif
 
 @endsection

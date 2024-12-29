@@ -4,7 +4,7 @@
 <div class="container-fluid mt-5 flex-grow-1 p-5 content">
     <h2 class="fw-bold">Edit Amenity</h2>
     <p class="text-secondary fw-semibold mb-4">Update the details below to edit the amenity information.</p>
-    <form method="POST" action="{{ route('amenities.update', $amenity->amenity_id) }}">
+    <form method="POST" action="{{ route('amenities.update', $amenity->amenity_id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
